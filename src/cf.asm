@@ -16,12 +16,29 @@
 
 
 section .data
-    SUCCESS db 0
+    ; 10 is the ascii num for \n and 0 is the \0 byte
+    HELP_MESSAGE db                           \
+    "Count the files in your directory tree", \
+    10,                                       \
+    10,                                       \
+    "Usage: cf [-d DIRECTORY]",               \
+    10, 0
 
 section .text
     global _start
 
 _start:
-    mov RAX, 60         ; 60 is the syscall code for exit
-    mov RDI, SUCCESS    ; exit with exit code 0
+    call help_message
+    syscall
+
+help_message:
+    mov RAX, 1               ; 1 is the syscall code for write
+    mov RDI, 2               ; 1 is the file descriptor for stdout
+    mov RSI, HELP_MESSAGE    ; move the string (the address of the first char)
+                             ; to the rsi, where write expects the buffer
+    mov RDX, 66              ; Size of buffer in RSI to write
+    syscall
+
+    mov RAX, 60              ; 60 is the syscall code for exit
+    mov RDI, 0               ; exit with exit code 0
     syscall
