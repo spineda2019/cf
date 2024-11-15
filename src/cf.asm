@@ -29,7 +29,6 @@ section .text
 
 _start:
     call help_message
-    syscall
 
 help_message:
     mov RAX, 1               ; 1 is the syscall code for write
