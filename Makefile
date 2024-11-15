@@ -13,14 +13,24 @@ ASSEMBLER_FLAGS := -f elf64
 all: $(BUILD_DIR) $(FINAL_OUTPUT)
 
 $(BUILD_DIR):
-	@echo Build directory is $(BUILD_DIR)
-	mkdir -p $@
+	@echo \################################################################################
+	@echo Creating build directory: $(BUILD_DIR)
+	@mkdir -p $@
+	@echo
 
 $(FINAL_OUTPUT): $(OBJECTS)
+	@echo \################################################################################
+	@echo "Linking objects to create $@"
+	@echo "Command:"
 	$(LINKER) $(OBJECTS) -o $@
+	@echo
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
+	@echo \################################################################################
+	@echo "Compiling object file: $<"
+	@echo "Command:"
 	$(ASSEMBLER) $(ASSEMBLER_FLAGS) $< -o $@
+	@echo
 
 clean:
 	@echo Cleaning build directory: $(BUILD_DIR)
