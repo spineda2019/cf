@@ -28,10 +28,24 @@ section .text
     global _start
 
 _start:
-    mov RDI, [rsp]           ; The first thing on the stack
+    mov RAX, [rsp]           ; The first thing on the stack
                              ; (where rsp initially points) should be argc, the
                              ; arg count
+
+    mov RBX, [rsp + 8]       ; Second value on the stack will be argv
+                             ; argv is a char**, all contiguous
+
+    call parse_args
     call help_message
+
+; Parse command line args
+; Input:
+;    RAX - address of Argc
+;    RBX - address of Argv
+parse_args:
+    mov RSI, RAX
+    mov RDX, 8
+    call print
 
 help_message:
     mov RSI, HELP_MESSAGE    ; move the string (the address of the first char)
