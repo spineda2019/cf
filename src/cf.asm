@@ -28,16 +28,32 @@ section .text
     global _start
 
 _start:
+    mov RDI, [rsp]           ; The first thing on the stack
+                             ; (where rsp initially points) should be argc, the
+                             ; arg count
     call help_message
 
 help_message:
-    mov RAX, 1               ; 1 is the syscall code for write
-    mov RDI, 2               ; 1 is the file descriptor for stdout
     mov RSI, HELP_MESSAGE    ; move the string (the address of the first char)
                              ; to the rsi, where write expects the buffer
     mov RDX, 66              ; Size of buffer in RSI to write
+    call print
+
+    call exit
+
+
+; Convenient routine for printing
+; Input:
+;    RSI - The address of the buffer to be printed
+;    RDX - The number of bytes to write to stdout
+print:
+    mov RAX, 1               ; 1 is the syscall code for write
+    mov RDI, 2               ; 1 is the file descriptor for stdout
     syscall
 
+; Convenient routine for exiting the program
+; Input:
+;    RDI - Exit code to exit with
+exit:
     mov RAX, 60              ; 60 is the syscall code for exit
-    mov RDI, 0               ; exit with exit code 0
     syscall
