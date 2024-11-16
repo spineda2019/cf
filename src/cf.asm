@@ -28,8 +28,15 @@ section .text
     global _start
 
 _start:
+    push RBP
+    mov RBP, RSP
+
     call parse_args
     call help_message
+
+    call exit
+
+    pop RBP
 
 ; Parse command line args
 ; Input:
@@ -37,6 +44,19 @@ _start:
 parse_args:
     push RBP
     mov RBP, RSP
+
+    sub RSP, 8               ; Reserve 8 bytes
+    mov byte [RBP], "H"
+    mov byte [RBP + 1], "e"
+    mov byte [RBP + 2], "l"
+    mov byte [RBP + 3], "l"
+    mov byte [RBP + 4], "o"
+    mov byte [RBP + 5], 10   ; LF byte (\n)
+    mov byte [RSP + 6], 0    ; null byte (\0)
+
+    mov RSI, RBP
+    mov RDX, 7
+    call print
 
 .done_parsing_args:
     pop RBP
