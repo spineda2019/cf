@@ -43,9 +43,13 @@ _start:
 ;    RAX - address of Argc
 ;    RBX - address of Argv
 parse_args:
+    push RBP
+    mov RBP, RBP
     mov RSI, RAX
     mov RDX, 8
     call print
+    pop RBP
+    ret
 
 help_message:
     mov RSI, HELP_MESSAGE    ; move the string (the address of the first char)
@@ -61,9 +65,13 @@ help_message:
 ;    RSI - The address of the buffer to be printed
 ;    RDX - The number of bytes to write to stdout
 print:
+    push RBP
+    mov RBP, RBP
     mov RAX, 1               ; 1 is the syscall code for write
     mov RDI, 2               ; 1 is the file descriptor for stdout
     syscall
+    pop rbp
+    ret
 
 ; Convenient routine for exiting the program
 ; Input:
