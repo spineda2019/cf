@@ -36,6 +36,7 @@ _start:
 
     call exit
 
+    mov RSP, RBP
     pop RBP
 
 ; Parse command line args
@@ -59,6 +60,7 @@ parse_args:
     call print
 
 .done_parsing_args:
+    mov RSP, RBP
     pop RBP
     ret
 
@@ -81,6 +83,7 @@ print:
     mov RAX, 1               ; 1 is the syscall code for write
     mov RDI, 2               ; 1 is the file descriptor for stdout
     syscall
+    mov RSP, RBP
     pop RBP
     ret
 
