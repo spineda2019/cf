@@ -1,5 +1,5 @@
 ;    cf: count the files in your current directory tree
-;    Copyright (C) <year>  <name of author>
+;    Copyright (C) 2024  Sebastian Pineda
 ;    
 ;    This program is free software: you can redistribute it and/or modify
 ;    it under the terms of the GNU General Public License as published by
