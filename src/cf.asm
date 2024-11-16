@@ -30,16 +30,10 @@ section .text
 ; The Entry point of our program. Not portalble to anything besides linux
 ; this is expected to be an ELF format binary (for now)
 _start:
-    push RBP
-    mov RBP, RSP
-
     call parse_args
     call help_message
 
     call exit
-
-    mov RSP, RBP
-    pop RBP
 
 ; Parse command line args
 ; Input:
