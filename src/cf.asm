@@ -27,6 +27,8 @@ section .data
 section .text
     global _start
 
+; The Entry point of our program. Not portalble to anything besides linux
+; this is expected to be an ELF format binary (for now)
 _start:
     push RBP
     mov RBP, RSP
