@@ -30,6 +30,9 @@ section .text
 ; The Entry point of our program. Not portalble to anything besides linux
 ; this is expected to be an ELF format binary (for now)
 _start:
+    ; ARGC and ARGV will be on the stack at this point.
+    ; ARGC will be firstand ARGV[n] will be at [RSP + 8n]
+    mov  QWORD RBX, [RSP]
     call parse_args
     call help_message
 
@@ -37,19 +40,21 @@ _start:
 
 ; Parse command line args
 ; Input:
-;    RDI - Argc
+;    EBX - Value of Argc
+; Note: I'm not explicitly following the C calling convention here, I
+; Am simply storing expected vars in registers (is this bad?)
 parse_args:
     push RBP
     mov RBP, RSP
 
-    sub RSP, 8               ; Reserve 8 bytes
-    mov byte [RBP], "H"
-    mov byte [RBP + 1], "e"
-    mov byte [RBP + 2], "l"
-    mov byte [RBP + 3], "l"
-    mov byte [RBP + 4], "o"
-    mov byte [RBP + 5], 10   ; LF byte (\n)
-    mov byte [RSP + 6], 0    ; null byte (\0)
+    sub RSP, 16               ; Reserve 16 bytes
+    mov byte [RBP], "A"
+    mov byte [RBP + 1], "r"
+    mov byte [RBP + 2], "g"
+    mov byte [RBP + 3], "c"
+    mov byte [RBP + 4], ":"
+    mov byte [RBP + 5], " "
+    mov ECX, EBX              ; Copy 4 bytes of Argc (int) to ECX
 
     mov RSI, RBP
     mov RDX, 7
