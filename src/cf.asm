@@ -36,6 +36,7 @@ _start:
     call parse_args
     call help_message
 
+    mov RDI, 0
     call exit
 
 ; Parse command line args
@@ -54,13 +55,17 @@ parse_args:
     mov byte [RBP + 3], "c"
     mov byte [RBP + 4], ":"
     mov byte [RBP + 5], " "
-    mov ECX, EBX              ; Copy 4 bytes of Argc (int) to ECX
+    mov EDX, 0xFF             ; a full byte
+    and EDX, EBX              ; extract byte 0 from right
+    sub EBX, 0d48                ; convert to ascii
+    mov byte [RBP + 6], BL
 
-    mov RSI, RBP
-    mov RDX, 7
+    mov byte [RBP + 7], 10   ; Newline byte
+
+    mov RSI, RBP              ; Feed string memory to RSI
+    mov RDX, 8
     call print
 
-.done_parsing_args:
     mov RSP, RBP
     pop RBP
     ret
@@ -71,6 +76,7 @@ help_message:
     mov RDX, 66              ; Size of buffer in RSI to write
     call print
 
+    mov RDI, 0
     call exit
 
 
@@ -79,13 +85,9 @@ help_message:
 ;    RSI - The address of the buffer to be printed
 ;    RDX - The number of bytes to write to stdout
 print:
-    push RBP
-    mov RBP, RSP
     mov RAX, 1               ; 1 is the syscall code for write
     mov RDI, 2               ; 1 is the file descriptor for stdout
     syscall
-    mov RSP, RBP
-    pop RBP
     ret
 
 ; Convenient routine for exiting the program
