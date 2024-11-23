@@ -41,7 +41,7 @@ _start:
 
 ; Parse command line args
 ; Input:
-;    EBX - Value of Argc
+;    RBX - Value of Argc
 ; Note: I'm not explicitly following the C calling convention here, I
 ; Am simply storing expected vars in registers (is this bad?)
 parse_args:
@@ -55,12 +55,10 @@ parse_args:
     mov byte [RBP + 3], "c"
     mov byte [RBP + 4], ":"
     mov byte [RBP + 5], " "
-    mov EDX, 0xFF             ; a full byte
-    and EDX, EBX              ; extract byte 0 from right
-    sub EBX, 0d48                ; convert to ascii
+    add BL, '0'               ; Convert to ascii
     mov byte [RBP + 6], BL
 
-    mov byte [RBP + 7], 10   ; Newline byte
+    mov byte [RBP + 7], 10    ; Newline byte
 
     mov RSI, RBP              ; Feed string memory to RSI
     mov RDX, 8
